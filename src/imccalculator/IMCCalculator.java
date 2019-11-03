@@ -17,8 +17,9 @@ public class IMCCalculator {
     public static void main(String[] args) {
         Frame frame = new Frame();
         frame.frameCaller();
-        ImcCalculator gui = new ImcCalculator();
-        gui.setVisible(true);
+//        ImcCalculator gui = new ImcCalculator();  //descomentar para a janela 
+//                                                  //feita com a ferramenta do netbeans
+//        gui.setVisible(true);
           
     }
     

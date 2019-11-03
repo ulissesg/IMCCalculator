@@ -7,8 +7,6 @@ package imccalculator;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,14 +16,17 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
  * @author ulisses
  */
-public class Frame {
+
+// Esse eu fiz na raça 
+// nao consegui mexer nas bordas envolta da janela
+
+public class Frame extends JFrame {
     
     public void frameCaller() {
         
@@ -46,31 +47,30 @@ public class Frame {
                 }
             }
         
-        // Esse eu fiz na raça
+        
         
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(300,500);
+        frame.setSize(300,400);
         frame.setTitle("IMC Calculator");
         frame.setLocationRelativeTo(null);
                 
         
 
 //        -------------------------------------------------------
-        
-        JPanel input = new JPanel(new GridLayout(2, 1));
-        JLabel weight = new JLabel("Weight");
+
+        JPanel input = new JPanel(new GridLayout(2, 1, 30, 30));
+        JLabel weight = new JLabel("Weight :");
         JTextField inputWeight = new JTextField(5);
-        JLabel height = new JLabel("Height");
+        JLabel height = new JLabel("Height :");
         JTextField inputHeight = new JTextField(8);
-       
-        
-        input.add(weight);
+ 
+        input.add( weight);
         input.add(inputWeight);
         
         input.add(height);
         input.add(inputHeight);
-        
+     
        
       
 //        --------------------------------------------------
@@ -78,24 +78,23 @@ public class Frame {
         JPanel buttons = new JPanel();
         JButton clear = new JButton("Clear");
         JButton calculate = new JButton("Calculate");
-        
+
         buttons.add(clear);
         buttons.add(calculate);
         
-        
 //        -------------------------------------------------
 
-        JPanel result = new JPanel(new GridLayout(2, 1));
+        JPanel result = new JPanel(new BorderLayout(5, 5));
         JLabel resultText = new JLabel("Result:");
         JTextArea resultArea = new JTextArea();
+        resultArea.setRows(13);
         
-        result.add(resultText);
-        result.add(resultArea);
+        result.add(BorderLayout.CENTER, resultText);
+        result.add(BorderLayout.SOUTH, resultArea);
         
         
 //       -------------------------------------------------------
         Container container = frame.getContentPane();
-        container.doLayout();
        
         container.add(BorderLayout.NORTH, input);
 
@@ -104,6 +103,7 @@ public class Frame {
         container.add(BorderLayout.SOUTH, result);
         
        
+        pack();
         frame.setVisible(true);
     }
 
