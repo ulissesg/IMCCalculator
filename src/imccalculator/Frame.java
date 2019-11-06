@@ -6,17 +6,17 @@
 package imccalculator;
 
 import java.awt.BorderLayout;
-import java.awt.Container;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.GridLayout;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
@@ -26,85 +26,144 @@ import javax.swing.UnsupportedLookAndFeelException;
 // Esse eu fiz na raça 
 // nao consegui mexer nas bordas envolta da janela
 
-public class Frame extends JFrame {
+public class Frame extends JFrame implements ActionListener{
+
+    JPanel input = new JPanel(new GridLayout(2, 1, 30, 30));
+    JLabel weight = new JLabel("Weight :");
+    JTextField inputWeight = new JTextField(10);
+    JLabel height = new JLabel("Height :");
+    JTextField inputHeight = new JTextField(10);
     
-    public void frameCaller() {
+    JPanel buttons = new JPanel();
+    JButton clear = new JButton("Clear");
+    JButton calculate = new JButton("Calculate");
+    
+    JPanel result = new JPanel(new BorderLayout(5, 5));
+    JLabel resultText = new JLabel("Result:");
+    JTextArea resultArea = new JTextArea();
+    
+    String inputWeights;
+    String inputHeights;
+    
+    public Frame(){
         
-        for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    try {
-                        javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    } catch (ClassNotFoundException ex) {
-                        Logger.getLogger(Frame.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (InstantiationException ex) {
-                        Logger.getLogger(Frame.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IllegalAccessException ex) {
-                        Logger.getLogger(Frame.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (UnsupportedLookAndFeelException ex) {
-                        Logger.getLogger(Frame.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    break;
-                }
-            }
-        
-        
-        
-        JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(300,400);
-        frame.setTitle("IMC Calculator");
-        frame.setLocationRelativeTo(null);
+        setLayout(new BorderLayout(10, 10));
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setSize(350,400);
+        setTitle("IMC Calculator");
+        setLocationRelativeTo(null);
                 
         
 
 //        -------------------------------------------------------
+        inputWeight.addActionListener(this);
+        inputHeight.addActionListener(this);
+           
 
-        JPanel input = new JPanel(new GridLayout(2, 1, 30, 30));
-        JLabel weight = new JLabel("Weight :");
-        JTextField inputWeight = new JTextField(5);
-        JLabel height = new JLabel("Height :");
-        JTextField inputHeight = new JTextField(8);
- 
         input.add( weight);
         input.add(inputWeight);
         
         input.add(height);
         input.add(inputHeight);
-     
-       
-      
-//        --------------------------------------------------
-        
-        JPanel buttons = new JPanel();
-        JButton clear = new JButton("Clear");
-        JButton calculate = new JButton("Calculate");
 
+//        --------------------------------------------------
+        buttons.setBackground(Color.red);
+        buttons.setLayout(null);
+        buttons.setSize(300, 50);
+        buttons.setBounds(10, 200, 300, 50);
+
+        clear.addActionListener(this);
+        calculate.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                inputHeights = inputHeight.getText().replace(",", ".");
+                inputWeights = inputWeight.getText().replace(",", ".");
+                double result;
+                String resultText;
+                
+                result = calculateImc(Double.parseDouble(inputWeights), Double.parseDouble(inputHeights));
+                resultText = classifyImc(result);
+                resultArea.setText(resultText);
+            }
+        });
+        
+        clear.setBounds(10, 10, 100,30);
+        calculate.setBounds(120, 10, 100,30);
+        
         buttons.add(clear);
         buttons.add(calculate);
         
 //        -------------------------------------------------
 
-        JPanel result = new JPanel(new BorderLayout(5, 5));
-        JLabel resultText = new JLabel("Result:");
-        JTextArea resultArea = new JTextArea();
-        resultArea.setRows(13);
+        resultArea.setRows(7);
         
         result.add(BorderLayout.CENTER, resultText);
         result.add(BorderLayout.SOUTH, resultArea);
         
         
 //       -------------------------------------------------------
-        Container container = frame.getContentPane();
        
-        container.add(BorderLayout.NORTH, input);
+        add(BorderLayout.NORTH, input);
 
-        container.add(BorderLayout.CENTER, buttons);
+        add(BorderLayout.CENTER, buttons);
         
-        container.add(BorderLayout.SOUTH, result);
+        add(BorderLayout.SOUTH, result);
         
        
         pack();
-        frame.setVisible(true);
+        setVisible(true);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent arg0) {
+        if (arg0.getSource() == clear){
+            JTextField x = new JTextField();
+            JTextArea y = new JTextArea();
+            int i = 0;
+            for(Component c : input.getComponents()){
+                if (c.getClass().toString().contains("javax.swing.JTextField")){
+                    x = (JTextField) c;
+                    x.setText("");
+                }
+            }
+            for(Component c : result.getComponents()){
+                if (c.getClass().toString().contains("javax.swing.JTextArea")){
+                    y = (JTextArea) c;
+                    y.setText("");
+                }
+            }
+        }
+//        if (arg0.getSource() == calculate){
+//            JOptionPane.showMessageDialog(null, "result of calculate");
+//        }
+//        if (arg0.getSource() == inputHeight){
+//            inputWeights = inputWeight.getText();
+//        }
+    }
+    
+    public double calculateImc (double weight, double height){
+        return weight/ Math.pow(height, 2);
+    }
+    
+    public String classifyImc (double x){
+        if (x < 18.5){
+            return (x + ": Underweight.");
+        }
+        if (x > 18.5 && x < 24.39){
+            return (x + ": Normal.");
+        }
+        if (x > 25 && x < 29.9){
+            return (x + ": Overweight.");
+        }
+        if (x > 30 && x < 34.9){
+            return (x + ": Obese.");
+        }
+        if (x > 35 && x < 39.9){
+            return (x + ": Serevely Obese.");
+        }
+        else{
+            return (x + ": Morbidly Obese.");
+        }
     }
 
 }
