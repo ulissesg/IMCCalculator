@@ -25,24 +25,19 @@ public class IMCCalculator {
                     try {
                         javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     } catch (ClassNotFoundException ex) {
-                        Logger.getLogger(Frame.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(FrameImc.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (InstantiationException ex) {
-                        Logger.getLogger(Frame.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(FrameImc.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (IllegalAccessException ex) {
-                        Logger.getLogger(Frame.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(FrameImc.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (UnsupportedLookAndFeelException ex) {
-                        Logger.getLogger(Frame.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(FrameImc.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     break;
                 }
             }
         
-        new Frame();
- 
-//        ImcCalculator gui = new ImcCalculator();  //descomentar para a janela 
-//                                                  //feita com a ferramenta do netbeans
-//        gui.setVisible(true);
-          
+        new FrameImc();
     }
     
 }

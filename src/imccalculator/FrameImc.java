@@ -5,10 +5,8 @@
  */
 package imccalculator;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
@@ -17,61 +15,56 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.plaf.ColorUIResource;
 
 /**
  *
  * @author ulisses
  */
-
-// Esse eu fiz na raça 
-// nao consegui mexer nas bordas envolta da janela
-
-public class Frame extends JFrame implements ActionListener{
-
-    JPanel input = new JPanel(new GridLayout(2, 1, 30, 30));
-    JLabel weight = new JLabel("Weight :");
-    JTextField inputWeight = new JTextField(10);
-    JLabel height = new JLabel("Height :");
-    JTextField inputHeight = new JTextField(10);
+public class FrameImc extends JFrame implements ActionListener{
     
-    JPanel buttons = new JPanel();
+    JPanel window = new JPanel();
+
+    JLabel weight = new JLabel("Weight");
+    JTextField inputWeight = new JTextField(10);
+    JLabel height = new JLabel("Height");
+    JTextField inputHeight = new JTextField(10);
+
     JButton clear = new JButton("Clear");
     JButton calculate = new JButton("Calculate");
-    
-    JPanel result = new JPanel(new BorderLayout(5, 5));
-    JLabel resultText = new JLabel("Result:");
+
+    JLabel resultText = new JLabel("Result");
     JTextArea resultArea = new JTextArea();
-    
+
     String inputWeights;
     String inputHeights;
     
-    public Frame(){
-        
-        setLayout(new BorderLayout(10, 10));
+    public FrameImc(){
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(350,400);
         setTitle("IMC Calculator");
         setLocationRelativeTo(null);
-                
+        setVisible(true);
+        setResizable(false);
+        window.setBackground(new Color(240, 240, 240));
+        window.setLayout(null);
         
-
-//        -------------------------------------------------------
+        weight.setBounds(15, 10, 70, 30);
+        inputWeight.setBounds(85, 10, 250, 30);
+        height.setBounds(15, 60, 70, 30);
+        inputHeight.setBounds(85, 60, 250, 30);
+        
+        clear.setBounds(15, 110, 150, 30);
+        calculate.setBounds(180, 110, 150, 30);
+        
+        resultText.setBounds(15, 160, 70, 20);
+        resultArea.setBounds(15, 185, 320, 165);
+        
+        resultArea.setRows(10);
+        
         inputWeight.addActionListener(this);
         inputHeight.addActionListener(this);
-           
-
-        input.add( weight);
-        input.add(inputWeight);
         
-        input.add(height);
-        input.add(inputHeight);
-
-//        --------------------------------------------------
-        buttons.setBackground(Color.red);
-        buttons.setLayout(null);
-        buttons.setSize(300, 50);
-        buttons.setBounds(10, 200, 300, 50);
-
         clear.addActionListener(this);
         calculate.addActionListener(new ActionListener() {
             @Override
@@ -87,31 +80,19 @@ public class Frame extends JFrame implements ActionListener{
             }
         });
         
-        clear.setBounds(10, 10, 100,30);
-        calculate.setBounds(120, 10, 100,30);
         
-        buttons.add(clear);
-        buttons.add(calculate);
+        window.add(weight);
+        window.add(inputWeight);
+        window.add(height);
+        window.add(inputHeight);
+        window.add(clear);
+        window.add(calculate);
+        window.add(resultText);
+        window.add(resultArea);
         
-//        -------------------------------------------------
-
-        resultArea.setRows(7);
-        
-        result.add(BorderLayout.CENTER, resultText);
-        result.add(BorderLayout.SOUTH, resultArea);
+        add(window);
         
         
-//       -------------------------------------------------------
-       
-        add(BorderLayout.NORTH, input);
-
-        add(BorderLayout.CENTER, buttons);
-        
-        add(BorderLayout.SOUTH, result);
-        
-       
-        pack();
-        setVisible(true);
     }
 
     @Override
@@ -120,25 +101,17 @@ public class Frame extends JFrame implements ActionListener{
             JTextField x = new JTextField();
             JTextArea y = new JTextArea();
             int i = 0;
-            for(Component c : input.getComponents()){
+            for(Component c : window.getComponents()){
                 if (c.getClass().toString().contains("javax.swing.JTextField")){
                     x = (JTextField) c;
                     x.setText("");
                 }
-            }
-            for(Component c : result.getComponents()){
                 if (c.getClass().toString().contains("javax.swing.JTextArea")){
                     y = (JTextArea) c;
                     y.setText("");
                 }
             }
         }
-//        if (arg0.getSource() == calculate){
-//            JOptionPane.showMessageDialog(null, "result of calculate");
-//        }
-//        if (arg0.getSource() == inputHeight){
-//            inputWeights = inputWeight.getText();
-//        }
     }
     
     public double calculateImc (double weight, double height){
@@ -147,23 +120,23 @@ public class Frame extends JFrame implements ActionListener{
     
     public String classifyImc (double x){
         if (x < 18.5){
-            return (x + ": Underweight.");
+            return (String.format("%.1f", x) + ": Underweight.");
         }
-        if (x > 18.5 && x < 24.39){
-            return (x + ": Normal.");
+        if (x > 18.5 && x < 24.9){
+            return (String.format("%.1f", x) + ": Normal.");
         }
         if (x > 25 && x < 29.9){
-            return (x + ": Overweight.");
+            return (String.format("%.1f", x) + ": Overweight.");
         }
         if (x > 30 && x < 34.9){
-            return (x + ": Obese.");
+            return (String.format("%.1f", x) + ": Obese.");
         }
         if (x > 35 && x < 39.9){
-            return (x + ": Serevely Obese.");
+            return (String.format("%.1f", x) + ": Serevely Obese.");
         }
         else{
-            return (x + ": Morbidly Obese.");
+            return (String.format("%.1f", x) + ": Morbidly Obese.");
         }
     }
-
+    
 }
